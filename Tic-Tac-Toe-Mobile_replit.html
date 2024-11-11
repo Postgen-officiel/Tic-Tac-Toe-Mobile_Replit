@@ -19,6 +19,7 @@
             overflow: hidden;
             position: relative;
         }
+
         #title {
             font-size: 3em;
             background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
@@ -27,6 +28,7 @@
             margin-bottom: 20px;
             z-index: 1;
         }
+
         #game { 
             display: grid; 
             grid-template-columns: repeat(3, 100px); 
@@ -35,6 +37,7 @@
             background-color: rgb(0, 0, 0);
             position: relative; 
         }
+
         .cell { 
             width: 100px; 
             height: 100px; 
@@ -50,6 +53,7 @@
             position: relative;
             animation: cellPulse 0.5s 
         }
+
         .cell::before, .cell::after {
             content: '';
             position: absolute;
@@ -62,14 +66,17 @@
             animation: rgbBorder 2s linear infinite;
             
         }
+
         .cell::before {
             border-color: red;
             animation-delay: 0s;
         }
+
         .cell::after {
             border-color: blue;
             animation-delay: 1s;
         }
+
         @keyframes rgbBorder {
             0% {
                 border-color: red;
@@ -84,32 +91,40 @@
                 border-color: red;
             }
         }
+
         .cell:hover, .cell.touchstart {
             transform: scale(1.1);
             border-radius: 50%;
         }
+
         .cell.x { 
             color: rgb(255, 64, 0);
             animation: xAnimation 0.5s forwards;
         }
+
         .cell.o { 
             color: rgb(2, 210, 72);
             animation: oAnimation 0.5s forwards;
         }
+
         @keyframes xAnimation {
             0% { transform: scale(0); }
             100% { transform: scale(1); }
         }
+
         @keyframes oAnimation {
             0% { transform: scale(0); }
             100% { transform: scale(1); }
         }
+
         .winning-cell.x {
             background-color: rgba(255, 64, 0, 0.5);
         }
+
         .winning-cell.o {
             background-color: rgba(2, 210, 72, 0.5);
         }
+
         #play-button {
             position: absolute; 
             top: 50%; 
@@ -122,13 +137,16 @@
             padding: 10px 20px;
             cursor: pointer;
         }
+
         #play-button:hover {
             opacity: 77%;
         }
+
         #play-button:disabled {
             background-color: grey;
             cursor: not-allowed;
         }
+
         #reset-button {
             position: absolute; 
             top: 54%; 
@@ -142,29 +160,35 @@
             cursor: pointer;
             display: none;
         }
+
         #reset-button:hover {
             opacity: 65%;
         }
+
         #alert-message {
             font-size: 2em;
             color: white;
             text-align: center;
             display: none;
         }
+
         #alert-message.x {
             color:rgb(255, 64, 0);
             z-index: 1;
         }
+
         #alert-message.o {
             color: rgb(2, 210, 72);
             z-index: 1;
         }
+
         #alert-message.draw {
             background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
             background-clip: text;
             color: transparent;
             z-index: 1;
         }
+
         #modal {
             display: none;
             position: fixed;
@@ -179,10 +203,12 @@
             opacity: 0;
             z-index: 1;
         }
+
         #modal.show {
             opacity: 1;
             z-index: 1;
         }
+
         #modal-content {
             background-color: transparent;
             padding: 20px;
@@ -190,10 +216,12 @@
             text-align: center;
             z-index: 1;
         }
+
         #modal-message {
             font-size: 3em;
             z-index: 1;
         }
+
         #player-turn {
             margin-top: 20px;
             font-size: 2em;
@@ -201,14 +229,17 @@
             text-align: center;
             z-index: 1;
         }
+
         #player-turn.x {
             color:rgb(255, 64, 0);
             z-index: 1;
         }
+
         #player-turn.o {
             color: rgb(2, 210, 72);
             z-index: 1;
         }
+
         #mode-button {
             position: absolute;
             top: 10px;
@@ -220,9 +251,11 @@
             padding: 10px 20px;
             cursor: pointer;
         }
+
         #mode-button:hover {
             opacity: 77%;
         }
+        
         body {
             display: flex;
             justify-content: center;
