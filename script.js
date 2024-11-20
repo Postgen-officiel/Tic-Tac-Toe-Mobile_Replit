@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         [0, 4, 8], [2, 4, 6]
     ];
 
-    modeButton.addEventListener('touchstart', () => {
+    modeButton.addEventListener('click', () => {
         clickSound.play();
         if (!isGameActive) {
             isSinglePlayer = !isSinglePlayer;
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    playButton.addEventListener('touchstart', () => {
+    playButton.addEventListener('click', () => {
         clickSound.play();
         isGameActive = true;
         playButton.style.display = 'none';
@@ -34,13 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     cells.forEach(cell => {
-        cell.addEventListener('touchstart', (event) => {
+        cell.addEventListener('click', () => {
             if (isGameActive && cell.textContent === '' && (currentPlayer === 'X' || (!isSinglePlayer && currentPlayer === 'O'))) {
                 cell.textContent = currentPlayer;
                 cell.classList.add(currentPlayer.toLowerCase());
                 clickSound.play();
-                cell.style.transition = 'border-radius 0ms ease-in-out'; 
-                cell.style.borderRadius = '50%'; 
                 if (checkWin(currentPlayer)) {
                     setTimeout(() => {
                         showModal(`${currentPlayer} gagne!`, currentPlayer);
@@ -59,44 +57,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         alertMessage.className = 'draw';
                         alertMessage.style.display = 'block';
                         playerTurn.style.display = 'none';
+                        cells.forEach(cell => {
+                            cell.style.opacity = '0.77';
+                        });
                     }, 100);
                 } else {
                     currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
                     updatePlayerTurn();
                     if (isSinglePlayer && currentPlayer === 'O') {
                         setTimeout(botMove, 919);
-                        function disablePlayerXClicks() {
-                            if (currentPlayer === 'O') {
-                                cells.forEach(cell => {
-                                    cell.style.pointerEvent = 'auto';
-                                });
-                            }
-                        }
-                        function enablePlayerXClicks() {
-                            if (currentPlayer === 'X') {
-                                cells.forEach(cell => {
-                                    cell.style.pointerEvents = 'auto';
-                                })
-                            }
-                        }
                     }
                 }
             }
         });
-        cell.addEventListener('touchend', (event) => {
-            if (cell.classList.contains(currentPlayer.toLowerCase())) {
-                cell.style.transition = 'border-radius 0.3s ease-in-out';
-                cell.style.borderRadius = '0'; 
-            }
-        });
     });
 
-    resetButton.addEventListener('touchstart', () => {
+    resetButton.addEventListener('click', () => {
         clickSound.play();
         resetGame();
     });
 
-    modalButton.addEventListener('touchstart', () => {
+    modalButton.addEventListener('click', () => {
         clickSound.play();
         resetGame();
         hideModal();
@@ -150,6 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 alertMessage.className = 'draw';
                 alertMessage.style.display = 'block';
                 playerTurn.style.display = 'none';
+                cells.forEach(cell => {
+                    cell.style.opacity = '0.77';
+                });
             }, 100);
         } else {
             currentPlayer = 'X';
@@ -173,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cells.forEach(cell => {
                 cell.textContent = '';
                 cell.classList.remove('x', 'o', 'winning-cell');
-                cell.style.borderRadius = '0';
+                cell.style.opacity = '0.96'; 
             });
             currentPlayer = 'X';
             playButton.style.display = 'block';
@@ -223,7 +207,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.flame-emoji').forEach(particle => {
         let directionX = Math.random() < 0.5 ? 1 : -1;
@@ -238,38 +221,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let isDragging = false;
         let offsetX, offsetY;
+        let touchStartX, touchStartY;
+        particle.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            offsetX = e.clientX - particle.getBoundingClientRect().left;
+            offsetY = e.clientY - particle.getBoundingClientRect().top;
+            particle.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                x = e.clientX - offsetX;
+                y = e.clientY - offsetY;
+                updateParticlePosition(x, y);
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            particle.style.cursor = 'grab';
+        });
 
         particle.addEventListener('touchstart', (e) => {
             isDragging = true;
-            const touch = e.touches[0];
-            offsetX = touch.clientX - particle.getBoundingClientRect().left;
-            offsetY = touch.clientY - particle.getBoundingClientRect().top;
-            particle.style.cursor = 'grabbing';
-            e.preventDefault();
+            touchStartX = e.touches[0].clientX - particle.getBoundingClientRect().left;
+            touchStartY = e.touches[0].clientY - particle.getBoundingClientRect().top;
         });
 
         document.addEventListener('touchmove', (e) => {
             if (isDragging) {
-                const touch = e.touches[0];
-                x = touch.clientX - offsetX;
-                y = touch.clientY - offsetY;
-                x = Math.max(0, Math.min(window.innerWidth - 60, x));
-                y = Math.max(0, Math.min(window.innerHeight - 60, y));
-                particle.style.left = `${x}px`;
-                particle.style.top = `${y}px`;
+                e.preventDefault();
+                x = e.touches[0].clientX - touchStartX;
+                y = e.touches[0].clientY - touchStartY;
+                updateParticlePosition(x, y);
             }
-            e.preventDfault();
         });
 
         document.addEventListener('touchend', () => {
             isDragging = false;
-            particle.style.cursor = 'grab';
         });
 
-        document.addEventListener('touchcancel', () => {
-            isDragging = false;
-            particle.style.cursor = 'grab';
-        });
+        function updateParticlePosition(x, y) {
+            x = Math.max(0, Math.min(window.innerWidth - 60, x));
+            y = Math.max(0, Math.min(window.innerHeight - 60, y));
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+        }
 
         function moveParticle() {
             if (!isDragging) {
