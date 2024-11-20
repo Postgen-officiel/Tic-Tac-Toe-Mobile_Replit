@@ -7,10 +7,8 @@ body {
     height: 100vh; 
     margin: 0; 
     background-color: rgb(0, 0, 0);
-    overflow: hidden;
-    position: relative;
+    user-select: none;
 }
-
 #title {
     font-size: 3em;
     background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
@@ -19,16 +17,13 @@ body {
     margin-bottom: 20px;
     z-index: 1;
 }
-
 #game { 
     display: grid; 
     grid-template-columns: repeat(3, 100px); 
     grid-template-rows: repeat(3, 100px); 
     gap: 5px;
-    background-color: rgb(0, 0, 0);
     position: relative; 
 }
-
 .cell { 
     width: 100px; 
     height: 100px; 
@@ -39,12 +34,11 @@ body {
     border: 1px solid transparent; 
     cursor: pointer;
     background-color: rgb(31, 31, 31); 
-    transition: transform 0.1s ease-in-out, border-radius 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, border-radius 0.3s ease-in-out;
     border-radius: 0;
     position: relative;
-    animation: cellPulse 0.5s 
+    opacity: 93%;
 }
-
 .cell::before, .cell::after {
     content: '';
     position: absolute;
@@ -57,17 +51,14 @@ body {
     animation: rgbBorder 2s linear infinite;
     
 }
-
 .cell::before {
     border-color: red;
     animation-delay: 0s;
 }
-
 .cell::after {
     border-color: blue;
     animation-delay: 1s;
 }
-
 @keyframes rgbBorder {
     0% {
         border-color: red;
@@ -82,40 +73,32 @@ body {
         border-color: red;
     }
 }
-
-.cell:hover, .cell.touchstart {
+.cell:hover, .cell.clicked {
     transform: scale(1.1);
     border-radius: 50%;
 }
-
 .cell.x { 
     color: rgb(255, 64, 0);
     animation: xAnimation 0.5s forwards;
 }
-
 .cell.o { 
     color: rgb(2, 210, 72);
     animation: oAnimation 0.5s forwards;
 }
-
 @keyframes xAnimation {
     0% { transform: scale(0); }
     100% { transform: scale(1); }
 }
-
 @keyframes oAnimation {
     0% { transform: scale(0); }
     100% { transform: scale(1); }
 }
-
 .winning-cell.x {
     background-color: rgba(255, 64, 0, 0.5);
 }
-
 .winning-cell.o {
     background-color: rgba(2, 210, 72, 0.5);
 }
-
 #play-button {
     position: absolute; 
     top: 50%; 
@@ -128,16 +111,13 @@ body {
     padding: 10px 20px;
     cursor: pointer;
 }
-
 #play-button:hover {
     opacity: 77%;
 }
-
 #play-button:disabled {
     background-color: grey;
     cursor: not-allowed;
 }
-
 #reset-button {
     position: absolute; 
     top: 54%; 
@@ -150,36 +130,31 @@ body {
     padding: 10px 20px;
     cursor: pointer;
     display: none;
+    opacity: 80%;
 }
-
 #reset-button:hover {
     opacity: 65%;
 }
-
 #alert-message {
     font-size: 2em;
     color: white;
     text-align: center;
     display: none;
 }
-
 #alert-message.x {
     color:rgb(255, 64, 0);
     z-index: 1;
 }
-
 #alert-message.o {
     color: rgb(2, 210, 72);
     z-index: 1;
 }
-
 #alert-message.draw {
     background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
     background-clip: text;
     color: transparent;
     z-index: 1;
 }
-
 #modal {
     display: none;
     position: fixed;
@@ -194,12 +169,10 @@ body {
     opacity: 0;
     z-index: 1;
 }
-
 #modal.show {
     opacity: 1;
     z-index: 1;
 }
-
 #modal-content {
     background-color: transparent;
     padding: 20px;
@@ -207,12 +180,10 @@ body {
     text-align: center;
     z-index: 1;
 }
-
 #modal-message {
     font-size: 3em;
     z-index: 1;
 }
-
 #player-turn {
     margin-top: 20px;
     font-size: 2em;
@@ -220,17 +191,14 @@ body {
     text-align: center;
     z-index: 1;
 }
-
 #player-turn.x {
     color:rgb(255, 64, 0);
     z-index: 1;
 }
-
 #player-turn.o {
     color: rgb(2, 210, 72);
     z-index: 1;
 }
-
 #mode-button {
     position: absolute;
     top: 10px;
@@ -241,6 +209,7 @@ body {
     border: none;
     padding: 10px 20px;
     cursor: pointer;
+    opacity: 85%;
 }
 #mode-button:hover {
     opacity: 77%;
