@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const gameBoard = document.getElementById('game');
     const cells = document.querySelectorAll('.cell');
     const playButton = document.getElementById('play-button');
     const resetButton = document.getElementById('reset-button');
@@ -18,6 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
         [0, 4, 8], [2, 4, 6]
     ];
 
+    cells.forEach(cell => {
+        cell.style.display = 'none';
+    });
+
     modeButton.addEventListener('click', () => {
         clickSound.play();
         if (!isGameActive) {
@@ -30,6 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
         clickSound.play();
         isGameActive = true;
         playButton.style.display = 'none';
+        modeButton.style.display = 'none';
+        cells.forEach(cell => {
+            cell.style.display = 'flex';
+        });
         updatePlayerTurn();
     });
 
@@ -58,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         alertMessage.style.display = 'block';
                         playerTurn.style.display = 'none';
                         cells.forEach(cell => {
-                            cell.style.opacity = '0.77';
+                            cell.style.opacity = '0.73';
                         });
                     }, 100);
                 } else {
@@ -132,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alertMessage.style.display = 'block';
                 playerTurn.style.display = 'none';
                 cells.forEach(cell => {
-                    cell.style.opacity = '0.77';
+                    cell.style.opacity = '0.73';
                 });
             }, 100);
         } else {
@@ -157,10 +166,12 @@ document.addEventListener('DOMContentLoaded', () => {
             cells.forEach(cell => {
                 cell.textContent = '';
                 cell.classList.remove('x', 'o', 'winning-cell');
-                cell.style.opacity = '0.96'; 
+                cell.style.opacity = '0.96';
+                cell.style.display = 'none';
             });
             currentPlayer = 'X';
             playButton.style.display = 'block';
+            modeButton.style.display = 'block';
             resetButton.style.display = 'none';
             alertMessage.style.display = 'none';
             playerTurn.style.display = 'block';
@@ -208,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.container').forEach(particle => {
+    document.querySelectorAll('.flame-emoji').forEach(particle => {
         let directionX = Math.random() < 0.5 ? 1 : -1;
         let directionY = Math.random() < 0.5 ? 1 : -1;
         let initialSpeedX = (Math.random() * 2) + 1;
@@ -223,7 +234,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let offsetX, offsetY;
         let initialX, initialY, finalX, finalY;
 
-        // Gestion des événements tactiles
         const handleStart = (e) => {
             isDragging = true;
             let touch = e.touches ? e.touches[0] : e;
@@ -312,6 +322,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             requestAnimationFrame(moveParticle);
         }
+
+        moveParticle();
+    });
+});
 
         moveParticle();
     });
