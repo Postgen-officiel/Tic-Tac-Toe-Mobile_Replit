@@ -37,7 +37,7 @@ body {
     transition: transform 0.3s ease-in-out, border-radius 0.3s ease-in-out;
     border-radius: 0;
     position: relative;
-    opacity: 93%;
+    opacity: 96%;
 }
 .cell::before, .cell::after {
     content: '';
@@ -110,9 +110,10 @@ body {
     border: none;
     padding: 10px 20px;
     cursor: pointer;
+    opacity: 83%;
 }
 #play-button:hover {
-    opacity: 77%;
+    opacity: 73%;
 }
 #play-button:disabled {
     background-color: grey;
@@ -130,7 +131,6 @@ body {
     padding: 10px 20px;
     cursor: pointer;
     display: none;
-    opacity: 80%;
 }
 #reset-button:hover {
     opacity: 65%;
@@ -209,10 +209,10 @@ body {
     border: none;
     padding: 10px 20px;
     cursor: pointer;
-    opacity: 85%;
+    opacity: 83%;
 }
 #mode-button:hover {
-    opacity: 77%;
+    opacity: 73%;
 }
 body {
     display: flex;
