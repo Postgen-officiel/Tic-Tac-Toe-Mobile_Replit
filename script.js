@@ -218,8 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.flame-emoji').forEach(particle => {
+document.querySelectorAll('.flame-emoji').forEach(particle => {
         let directionX = Math.random() < 0.5 ? 1 : -1;
         let directionY = Math.random() < 0.5 ? 1 : -1;
         let initialSpeedX = (Math.random() * 2) + 1;
@@ -325,9 +324,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
         moveParticle();
     });
-});
-
-        moveParticle();
-    });
-});
-
