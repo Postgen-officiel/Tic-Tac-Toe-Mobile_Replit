@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     cells.forEach(cell => {
         cell.style.display = 'none';
+        if (cell.style.display === 'none') {
+            cell.zIndex = 0;
+        };
     });
 
     modeButton.addEventListener('click', () => {
@@ -38,6 +41,9 @@ document.addEventListener('DOMContentLoaded', () => {
         modeButton.style.display = 'none';
         cells.forEach(cell => {
             cell.style.display = 'flex';
+            if (cell.style.display === 'flex') {
+                cell.zIndex = 2;
+            };
         });
         updatePlayerTurn();
     });
@@ -168,6 +174,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 cell.classList.remove('x', 'o', 'winning-cell');
                 cell.style.opacity = '0.96';
                 cell.style.display = 'none';
+                if (cell.style.display === 'none') {
+                    cell.zIndex = 0;
+                };
             });
             currentPlayer = 'X';
             playButton.style.display = 'block';
@@ -183,15 +192,15 @@ document.addEventListener('DOMContentLoaded', () => {
         modalMessage.textContent = message;
         modalMessage.style.fontSize = '3em';
         playerTurn.style.display = 'none';
+
         if (type === 'X') {
-            modalMessage.style.color = 'rgb(255, 64, 0)';
+            alertMessage.className = 'x';
         } else if (type === 'O') {
-            modalMessage.style.color = 'rgb(2, 210, 72)';
+            alertMessage.className = 'o';
         } else if (type === 'draw') {
-            modalMessage.style.background = 'linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet)';
-            modalMessage.style.BackgroundClip = 'text';
-            modalMessage.style.color = 'transparent';
+            alertMessage.className = 'draw';
         }
+
         modal.classList.add('show');
     }
 
@@ -218,109 +227,114 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
 document.querySelectorAll('.flame-emoji').forEach(particle => {
-        let directionX = Math.random() < 0.5 ? 1 : -1;
-        let directionY = Math.random() < 0.5 ? 1 : -1;
-        let initialSpeedX = (Math.random() * 2) + 1;
-        let initialSpeedY = (Math.random() * 2) + 1;
-        let speedX = initialSpeedX;
-        let speedY = initialSpeedY;
-        let x = Math.random() * (window.innerWidth - 60);
-        let y = Math.random() * (window.innerHeight - 60);
-        particle.style.left = `${x}px`;
-        particle.style.top = `${y}px`;
-        let isDragging = false;
-        let offsetX, offsetY;
-        let initialX, initialY, finalX, finalY;
+    let directionX = Math.random() < 0.5 ? 1 : -1;
+    let directionY = Math.random() < 0.5 ? 1 : -1;
+    let initialSpeedX = (Math.random() * 2) + 1;
+    let initialSpeedY = (Math.random() * 2) + 1;
+    let speedX = initialSpeedX;
+    let speedY = initialSpeedY;
+    let x = Math.random() * (window.innerWidth - 60);
+    let y = Math.random() * (window.innerHeight - 60);
+    particle.style.left = `${x}px`;
+    particle.style.top = `${y}px`;
+    let isDragging = false;
+    let offsetX, offsetY;
+    let initialX, initialY, finalX, finalY;
 
-        const handleStart = (e) => {
-            isDragging = true;
+    const handleStart = (e) => {
+        isDragging = true;
+        let touch = e.touches ? e.touches[0] : e;
+        offsetX = touch.clientX - particle.getBoundingClientRect().left;
+        offsetY = touch.clientY - particle.getBoundingClientRect().top;
+        initialX = touch.clientX;
+        initialY = touch.clientY;
+        particle.style.cursor = 'grabbing';
+    };
+
+    const handleMove = (e) => {
+        if (isDragging) {
             let touch = e.touches ? e.touches[0] : e;
-            offsetX = touch.clientX - particle.getBoundingClientRect().left;
-            offsetY = touch.clientY - particle.getBoundingClientRect().top;
-            initialX = touch.clientX;
-            initialY = touch.clientY;
-            particle.style.cursor = 'grabbing';
-        };
-
-        const handleMove = (e) => {
-            if (isDragging) {
-                let touch = e.touches ? e.touches[0] : e;
-                x = touch.clientX - offsetX;
-                y = touch.clientY - offsetY;
-                x = Math.max(0, Math.min(window.innerWidth - 60, x));
-                y = Math.max(0, Math.min(window.innerHeight - 60, y));
-                particle.style.left = `${x}px`;
-                particle.style.top = `${y}px`;
-            }
-        };
-
-        const handleEnd = (e) => {
-            if (isDragging) {
-                isDragging = false;
-                let touch = e.changedTouches ? e.changedTouches[0] : e;
-                finalX = touch.clientX;
-                finalY = touch.clientY;
-                directionX = finalX - initialX > 0 ? 1 : -1;
-                directionY = finalY - initialY > 0 ? 1 : -1;
-                speedX = Math.abs(finalX - initialX) / 10;
-                speedY = Math.abs(finalY - initialY) / 10;
-                particle.style.cursor = 'grab';
-
-                setTimeout(() => {
-                    let intervalId = setInterval(() => {
-                        if (speedX > initialSpeedX) {
-                            speedX -= 0.05;
-                        } else {
-                            speedX = initialSpeedX;
-                        }
-
-                        if (speedY > initialSpeedY) {
-                            speedY -= 0.05;
-                        } else {
-                            speedY = initialSpeedY;
-                        }
-
-                        if (speedX === initialSpeedX && speedY === initialSpeedY) {
-                            clearInterval(intervalId);
-                        }
-                    }, 50);
-                }, 1453); 
-            }
-        };
-
-        particle.addEventListener('mousedown', handleStart);
-        particle.addEventListener('touchstart', handleStart);
-
-        document.addEventListener('mousemove', handleMove);
-        document.addEventListener('touchmove', handleMove);
-
-        document.addEventListener('mouseup', handleEnd);
-        document.addEventListener('touchend', handleEnd);
-
-        function moveParticle() {
-            if (!isDragging) {
-                if (x + 60 > window.innerWidth) {
-                    directionX *= -1;
-                    x = window.innerWidth - 60;
-                } else if (x < 0) {
-                    directionX *= -1;
-                    x = 0;
-                }
-                if (y + 60 > window.innerHeight) {
-                    directionY *= -1;
-                    y = window.innerHeight - 60;
-                } else if (y < 0) {
-                    directionY *= -1;
-                    y = 0;
-                }
-                x += directionX * speedX;
-                y += directionY * speedY;
-                particle.style.left = `${x}px`;
-                particle.style.top = `${y}px`;
-            }
-            requestAnimationFrame(moveParticle);
+            x = touch.clientX - offsetX;
+            y = touch.clientY - offsetY;
+            x = Math.max(0, Math.min(window.innerWidth - 60, x));
+            y = Math.max(0, Math.min(window.innerHeight - 60, y));
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
         }
+    };
 
-        moveParticle();
-    });
+    const handleEnd = (e) => {
+        if (isDragging) {
+            isDragging = false;
+            let touch = e.changedTouches ? e.changedTouches[0] : e;
+            finalX = touch.clientX;
+            finalY = touch.clientY;
+            directionX = finalX - initialX > 0 ? 1 : -1;
+            directionY = finalY - initialY > 0 ? 1 : -1;
+            speedX = Math.abs(finalX - initialX) / 10;
+            speedY = Math.abs(finalY - initialY) / 10;
+            particle.style.cursor = 'grab';
+            x = initialX;
+            y = initialY;
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+
+            setTimeout(() => {
+                let intervalId = setInterval(() => {
+                    if (speedX > initialSpeedX) {
+                        speedX -= 0.05;
+                    } else {
+                        speedX = initialSpeedX;
+                    }
+
+                    if (speedY > initialSpeedY) {
+                        speedY -= 0.05;
+                    } else {
+                        speedY = initialSpeedY;
+                    }
+
+                    if (speedX === initialSpeedX && speedY === initialSpeedY) {
+                        clearInterval(intervalId);
+                    }
+                }, 50);
+            }, 1453); 
+        }
+    };
+
+    particle.addEventListener('mousedown', handleStart);
+    particle.addEventListener('touchstart', handleStart);
+
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('touchmove', handleMove);
+
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchend', handleEnd);
+
+    function moveParticle() {
+        if (!isDragging) {
+            if (x + 60 > window.innerWidth) {
+                directionX *= -1;
+                x = window.innerWidth - 60;
+            } else if (x < 0) {
+                directionX *= -1;
+                x = 0;
+            }
+            if (y + 60 > window.innerHeight) {
+                directionY *= -1;
+                y = window.innerHeight - 60;
+            } else if (y < 0) {
+                directionY *= -1;
+                y = 0;
+            }
+            x += directionX * speedX;
+            y += directionY * speedY;
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+        }
+        requestAnimationFrame(moveParticle);
+    }
+
+    moveParticle();
+});
